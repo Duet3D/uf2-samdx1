@@ -1,7 +1,8 @@
-BOARD=zero
+BOARD=Duet5LC
+ArmGccPath=C:\Program Files (x86)\GNU Tools ARM Embedded\9 2019-q4-major\bin
 -include Makefile.user
 include boards/$(BOARD)/board.mk
-CC=arm-none-eabi-gcc
+CC="$(ArmGccPath)\arm-none-eabi-gcc"
 ifeq ($(CHIP_FAMILY), samd21)
 COMMON_FLAGS = -mthumb -mcpu=cortex-m0plus -Os -g -DSAMD21
 endif
@@ -151,15 +152,15 @@ selflogs:
 
 dirs:
 	@echo "Building $(BOARD)"
-	-@mkdir -p $(BUILD_PATH)
+	-@mkdir -p "$(BUILD_PATH)"
 
 $(EXECUTABLE): $(OBJECTS)
 	$(CC) -L$(BUILD_PATH) $(LDFLAGS) \
 		 -T$(LINKER_SCRIPT) \
 		 -Wl,-Map,$(BUILD_PATH)/$(NAME).map -o $(BUILD_PATH)/$(NAME).elf $(OBJECTS)
-	arm-none-eabi-objcopy -O binary $(BUILD_PATH)/$(NAME).elf $@
+	"$(ArmGccPath)/arm-none-eabi-objcopy" -O binary $(BUILD_PATH)/$(NAME).elf $@
 	@echo
-	-@arm-none-eabi-size $(BUILD_PATH)/$(NAME).elf | awk '{ s=$$1+$$2; print } END { print ""; print "Space left: " ($(BOOTLOADER_SIZE)-s) }'
+	-@"$(ArmGccPath)/arm-none-eabi-size" $(BUILD_PATH)/$(NAME).elf | awk '{ s=$$1+$$2; print } END { print ""; print "Space left: " ($(BOOTLOADER_SIZE)-s) }'
 	@echo
 
 $(BUILD_PATH)/uf2_version.h: Makefile
@@ -169,7 +170,7 @@ $(SELF_EXECUTABLE): $(SELF_OBJECTS)
 	$(CC) -L$(BUILD_PATH) $(LDFLAGS) \
 		 -T$(SELF_LINKER_SCRIPT) \
 		 -Wl,-Map,$(BUILD_PATH)/update-$(NAME).map -o $(BUILD_PATH)/update-$(NAME).elf $(SELF_OBJECTS)
-	arm-none-eabi-objcopy -O binary $(BUILD_PATH)/update-$(NAME).elf $(BUILD_PATH)/update-$(NAME).bin
+	"$(ArmGccPath)/arm-none-eabi-objcopy" -O binary $(BUILD_PATH)/update-$(NAME).elf $(BUILD_PATH)/update-$(NAME).bin
 	python3 lib/uf2/utils/uf2conv.py -b $(BOOTLOADER_SIZE) -c -o $@ $(BUILD_PATH)/update-$(NAME).bin
 
 $(BUILD_PATH)/%.o: src/%.c $(wildcard inc/*.h boards/*/*.h) $(BUILD_PATH)/uf2_version.h
