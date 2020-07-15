@@ -2,10 +2,10 @@
 #define BOARD_CONFIG_H
 
 #define VENDOR_NAME "Duet3D"
-#define PRODUCT_NAME "Duet3-5LC"
+#define PRODUCT_NAME "Duet3-Mini5+"
 #define VOLUME_LABEL "DuetBOOT"
 #define INDEX_URL "https://www.duet3d.com"
-#define BOARD_ID "Duet3-5LC"
+#define BOARD_ID "Duet3-Mini5+"
 
 #define USB_VID 0x239A
 #define USB_PID 0x00B5
