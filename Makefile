@@ -1,4 +1,6 @@
-BOARD=Duet5LC
+# Select the board you want to build the bootloader for in the line below
+#BOARD=Duet5LC
+BOARD=FMDC
 ArmGccPath=C:\Program Files (x86)\GNU Tools ARM Embedded\9 2019-q4-major\bin
 -include Makefile.user
 include boards/$(BOARD)/board.mk
